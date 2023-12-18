@@ -36,3 +36,8 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Aplikacja jest na porcie ${port}`);
 });
+
+
+// DB_USERNAME="admin2"
+// DB_PASSWORD="admin2"
+// DB_NAME="pv1"
