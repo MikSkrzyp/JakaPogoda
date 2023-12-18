@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path")
 const mongoose = require("mongoose")
+const Authroutes = require('./api/routes/authRoutes')
 const weatherRoutes = require("./api/routes/weathers")
 
 const app = express();
@@ -13,14 +14,15 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.static("public"));
 
 // renderowanie strony glownej z wartosciami domyslnymi
-  app.use("/weather",weatherRoutes)
+  app.use("/",weatherRoutes)
 //Middlewares
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
-
-  app.get("/", (req, res) => {
-    res.render("index", { weather: null, error: null });
-  });
+//ROUTES
+app.use('/', Authroutes)
+  // app.get("/", (req, res) => {
+  //   res.render("index", { weather: null, error: null });
+  // });
 
 //zmienne srodowiesko
 require("dotenv").config()
