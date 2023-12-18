@@ -20,5 +20,5 @@ exports.weather_get = async (req,res) =>{
       weather = null;
     }
   
-    res.render("index", { weather, error });
+    res.render("index", { weather, error, user: req.user });
 }

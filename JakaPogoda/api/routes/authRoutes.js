@@ -12,48 +12,6 @@ const express = require('express');
 const { initializeMiddlewares, ensureAuth } = require('../middleware/ensureAuth');
 
 initializeMiddlewares(routes);
-//Conect to db
-// dotenv.config()
-// mongoose.connect(process.env.DB_CONNECT, {
-//     useNewUrlParser: true, useUnifiedTopology: true,
-// }).then(() => console.log("DATABASE CONNECTED")).catch((err) => {
-//     console.log("Error while connecting with database ", err)
-// })
-
-
-// //middlewares
-// routes.use(cookieParser('secret'))
-// routes.use(session({
-//     secret: 'secret',
-//     maxAge: 3600000,
-//     resave: true,
-//     saveUninitialized: false,
-// }))
-//
-// //set passport
-// routes.use(passport.initialize())
-// routes.use(passport.session())
-//
-// //Connect Flash after cookie and session
-// routes.use(flash());
-// routes.use(function (req, res, next) {
-//     res.locals.success_message = req.flash('success_message')
-//     res.locals.error_message = req.flash('error_message')
-//     res.locals.error = req.flash('error')
-//     next()
-//
-// })
-//
-// //Ensure Auth
-// const ensureAuth = function (req, res, next) {
-//     if (req.isAuthenticated()) {
-//         res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, post-check=0, pre-check=0');
-//         next();
-//     } else {
-//         req.flash('error_message', "Please Login to continue !");
-//         res.redirect('/login');
-//     }
-// }
 
 //ROUTES
 //GET index signup page
@@ -162,7 +120,8 @@ routes.post('/login', (req, res, next) => {
     //define startegy
     passport.authenticate('local', {
         failureRedirect: '/login',
-        successRedirect: '/success',
+        //successRedirect: '/success',
+        successRedirect: '/',
         failureFlash: true,
     })(req, res, next);
 })

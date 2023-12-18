@@ -12,7 +12,7 @@ router.get("/weather",ensureAuth,weatherController.weather_get);
 
 
 router.get("/", ensureAuth,(req, res) => {
-    res.render("index", { weather: null, error: null });
+    res.render("index", { weather: null, error: null, user: req.user });
 });
 
 module.exports = router;
