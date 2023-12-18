@@ -8,7 +8,10 @@ const session = require('express-session')
 const dotenv = require('dotenv')
 const flash = require('connect-flash')
 
+const express = require('express');
+const { initializeMiddlewares, ensureAuth } = require('../middleware/ensureAuth');
 
+initializeMiddlewares(routes);
 //Conect to db
 // dotenv.config()
 // mongoose.connect(process.env.DB_CONNECT, {
@@ -18,39 +21,39 @@ const flash = require('connect-flash')
 // })
 
 
-//middlewares
-routes.use(cookieParser('secret'))
-routes.use(session({
-    secret: 'secret',
-    maxAge: 3600000,
-    resave: true,
-    saveUninitialized: false,
-}))
-
-//set passport
-routes.use(passport.initialize())
-routes.use(passport.session())
-
-//Connect Flash after cookie and session
-routes.use(flash());
-routes.use(function (req, res, next) {
-    res.locals.success_message = req.flash('success_message')
-    res.locals.error_message = req.flash('error_message')
-    res.locals.error = req.flash('error')
-    next()
-
-})
-
-//Ensure Auth
-const ensureAuth = function (req, res, next) {
-    if (req.isAuthenticated()) {
-        res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, post-check=0, pre-check=0');
-        next();
-    } else {
-        req.flash('error_message', "Please Login to continue !");
-        res.redirect('/login');
-    }
-}
+// //middlewares
+// routes.use(cookieParser('secret'))
+// routes.use(session({
+//     secret: 'secret',
+//     maxAge: 3600000,
+//     resave: true,
+//     saveUninitialized: false,
+// }))
+//
+// //set passport
+// routes.use(passport.initialize())
+// routes.use(passport.session())
+//
+// //Connect Flash after cookie and session
+// routes.use(flash());
+// routes.use(function (req, res, next) {
+//     res.locals.success_message = req.flash('success_message')
+//     res.locals.error_message = req.flash('error_message')
+//     res.locals.error = req.flash('error')
+//     next()
+//
+// })
+//
+// //Ensure Auth
+// const ensureAuth = function (req, res, next) {
+//     if (req.isAuthenticated()) {
+//         res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, post-check=0, pre-check=0');
+//         next();
+//     } else {
+//         req.flash('error_message', "Please Login to continue !");
+//         res.redirect('/login');
+//     }
+// }
 
 //ROUTES
 //GET index signup page
@@ -170,13 +173,19 @@ routes.get('/success', ensureAuth, (req, res) => {
     res.render('success', { 'user': req.user })
 })
 
-//logout
+// Logout route
 routes.get('/logout', (req, res) => {
-    req.logout();
-    req.flash('success_message', "Logout Successfully login to continue")
-    res.redirect('/login')
+    req.logout(function(err) {
+        if (err) {
+            // Handle error if there's any
+            console.error(err);
+            return next(err);
+        }
+        req.flash('success_message', "Logout Successful. Login to continue.");
+        res.redirect('/login');
+    });
+});
 
-})
 
 //Post Messages
 routes.post('/addmsg', ensureAuth, (req, res) => {
