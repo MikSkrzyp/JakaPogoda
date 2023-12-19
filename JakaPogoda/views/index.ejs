@@ -65,7 +65,7 @@
     <% cities.forEach(city => { %>
       <tr>
         <td><%= city %></td>
-        <td><%= user.email %></td>
+        <td><%= citiesData[city]["main"]["temp"] %></td>
       </tr>
     <% }); %>
     <% } %>

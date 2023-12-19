@@ -59,6 +59,24 @@ routes.use(bodyParser.json());
 
 exports.weather_get = async (req, res) => {
     const cityName = req.query.city;
+    //function which return json with weather for city
+    const weather = await weatherJson(cityName);
+    const user = req.user
+
+const Cities = await City.find({email: user.email});
+
+let CitiesData = {}
+
+    Cities.forEach(city => {
+        CitiesData[city.name] = weatherJson(city.name)
+    })
+
+    console.log(CitiesData)
+
+    res.render("index", { weather, user: req.user, city: cityName,cities: Cities, citiesData: CitiesData});
+}
+
+async function weatherJson(cityName) {
     const api = '06c70491b3c169a9083f9587f91c5153';
 
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${api}`;
@@ -73,13 +91,7 @@ exports.weather_get = async (req, res) => {
         console.error(err);
         weather = null;
     }
-    const user = req.user
-
-
-
-const Cities = await City.find({email: user.email});
-
-    res.render("index", { weather, error, user: req.user, city: cityName,cities: Cities});
+    return weather;
 }
 
 
