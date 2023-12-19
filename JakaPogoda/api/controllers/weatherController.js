@@ -73,9 +73,16 @@ exports.weather_get = async (req, res) => {
         console.error(err);
         weather = null;
     }
+    const user = req.user
 
-    res.render("index", { weather, error, user: req.user, city: cityName });
+
+
+const Cities = await City.find({email: user.email});
+
+    res.render("index", { weather, error, user: req.user, city: cityName,cities: Cities});
 }
+
+
 
 // exports.create_city = (req, res, next) => {
 //     const newCity = new City({

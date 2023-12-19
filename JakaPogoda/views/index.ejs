@@ -52,5 +52,24 @@
     </div>
   <a class="btn btn-danger" href="/logout">Wyloguj</a>
     <div class="signature">Oskar i Mikołaj</div>
+
+  <table>
+    <thead>
+    <tr>
+      <th>City</th>
+      <th>temperatura</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% if (cities !== null) { %>
+    <% cities.forEach(city => { %>
+      <tr>
+        <td><%= city %></td>
+        <td><%= user.email %></td>
+      </tr>
+    <% }); %>
+    <% } %>
+    </tbody>
+  </table>
   </body>
 </html>
