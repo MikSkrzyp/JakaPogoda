@@ -14,19 +14,19 @@ const { initializeMiddlewares, ensureAuth } = require('../middleware/ensureAuth'
 initializeMiddlewares(routes);
 
 //ROUTES
-//GET index signup page
+//GET index strona rejestracyjna
 routes.get('/register', (req, res) => {
     res.render('register')
 })
 
-//signup
+//rejestracja
 
 
 routes.post('/register', async (req, res) => {
     try {
         const { username, email, password1, password2 } = req.body;
 
-        // Validation
+        // walidacja
         if (!email || !username || !password1 || !password2) {
             throw new Error("Please fill all the fields");
         }
@@ -35,25 +35,25 @@ routes.post('/register', async (req, res) => {
             throw new Error("Passwords don't match");
         }
 
-        // Check if the user already exists
+        // sprawdzenie czy uzytkownik istnieje
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
             throw new Error("User already exists");
         }
 
-        // Hash the password
+        // hashowanie hasla
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password1, salt);
 
-        // Create a new user
+        // stworzenie nowego usera
         const newUser = new User({
             username,
             email,
             password: hashedPassword
         });
 
-        // Save the new user to the database
+        // zapisywanie do bazy danych
         await newUser.save();
 
         req.flash('success_message', 'Registered Successfully. Please log in to continue.');
@@ -70,26 +70,26 @@ passport.use(new localStrategy({
     usernameField: 'email'
 }, async (email, password, done) => {
     try {
-        // Find user by email
+        // znajdz uzytkownika po mailu
         const user = await User.findOne({ email });
 
-        // If no user exists
+        // jezeli user nie istnieje
         if (!user) {
             return done(null, false, { message: "User Doesn't Exist" });
         }
 
-        // Compare passwords
+        // porownaj hasla
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            // Passwords don't match
+            // hasla nie pasuja
             return done(null, false, { message: "Email or Password did not Match" });
         }
 
-        // Passwords match
+        // hasla pasuja
         return done(null, user);
     } catch (error) {
-        // Handle errors
+        // errory
         return done(null, false, { message: "Some Error Occurred" });
     }
 }));
@@ -106,7 +106,7 @@ passport.deserializeUser(async (id, cb) => {
         cb(err, null);
     }
 });
-// END OF AUTH STRATEGY
+// koniec AUTH STRATEGY
 
 
 
@@ -117,22 +117,22 @@ routes.get('/login', (req, res) => {
 })
 routes.post('/login', (req, res, next) => {
     console.log(req.body)
-    //define startegy
+    //definiowanie strategy
     passport.authenticate('local', {
         failureRedirect: '/login',
-        //successRedirect: '/success',
+        
         successRedirect: '/',
         failureFlash: true,
     })(req, res, next);
 })
 
 
-//success
+//sukces
 routes.get('/success', ensureAuth, (req, res) => {
     res.render('success', { 'user': req.user })
 })
 
-// Logout route
+// wylogowywanie rout
 routes.get('/logout', (req, res) => {
     req.logout(function(err) {
         if (err) {
@@ -146,7 +146,7 @@ routes.get('/logout', (req, res) => {
 });
 
 
-//Post Messages
+//post wiadomosci
 routes.post('/addmsg', ensureAuth, (req, res) => {
     User.findOneAndUpdate({
             email: req.user.email
