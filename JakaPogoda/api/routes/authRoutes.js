@@ -136,7 +136,7 @@ routes.get('/success', ensureAuth, (req, res) => {
 routes.get('/logout', (req, res) => {
     req.logout(function(err) {
         if (err) {
-            // Handle error if there's any
+            // obsluga errorow
             console.error(err);
             return next(err);
         }
