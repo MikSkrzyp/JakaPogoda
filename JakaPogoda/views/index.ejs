@@ -61,13 +61,13 @@
     </tr>
     </thead>
     <tbody>
-    <% if (cities !== null) { %>
-    <% cities.forEach(city => { %>
-      <tr>
-        <td><%= city %></td>
-        <td><%= citiesData[city]["main"]["temp"] %></td>
-      </tr>
-    <% }); %>
+    <% if (cities !== null && citiesData !== null) { %>
+      <% cities.forEach(city => { %>
+        <tr>
+          <td><%= city["name"] %></td>
+            <td><%= citiesData[city["name"]].main.temp %></td>
+        </tr>
+      <% }); %>
     <% } %>
     </tbody>
   </table>

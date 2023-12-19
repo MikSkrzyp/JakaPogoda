@@ -57,43 +57,88 @@ const app = express();
 routes.use(bodyParser.urlencoded({ extended: true }));
 routes.use(bodyParser.json());
 
+// exports.weather_get = async (req, res) => {
+//     const cityName = req.query.city;
+//     //function which return json with weather for city
+//     const weather = await weatherJson(cityName);
+//     const user = req.user
+//
+// const Cities = await City.find({email: user.email});
+//
+// let CitiesData = {}
+//
+//     Cities.forEach(city => {
+//         CitiesData[city.name] = weatherJson(city.name)
+//     })
+//
+//     console.log(CitiesData)
+//
+//     res.render("index", { weather, user: req.user, city: cityName,cities: Cities, citiesData: CitiesData});
+// }
+//
+// async function weatherJson(cityName) {
+//     const api = '06c70491b3c169a9083f9587f91c5153';
+//
+//     const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${api}`;
+//
+//     let weather;
+//     let error = "Nie ma takiego miasta!";
+//     try {
+//         const response = await axios.get(url);
+//         weather = response.data;
+//         error = null;
+//     } catch (err) {
+//         console.error(err);
+//         weather = null;
+//     }
+//     return weather;
+// }
+
 exports.weather_get = async (req, res) => {
     const cityName = req.query.city;
-    //function which return json with weather for city
     const weather = await weatherJson(cityName);
-    const user = req.user
+    const user = req.user;
 
-const Cities = await City.find({email: user.email});
+    const Cities = await City.find({ email: user.email });
 
-let CitiesData = {}
+    const citiesWeatherPromises = Cities.map(city => weatherJson(city.name));
 
-    Cities.forEach(city => {
-        CitiesData[city.name] = weatherJson(city.name)
-    })
+    try {
+        const citiesWeatherData = await Promise.all(citiesWeatherPromises);
 
-    console.log(CitiesData)
+        const CitiesData = {};
+        Cities.forEach((city, index) => {
+            CitiesData[city.name] = citiesWeatherData[index];
+        });
 
-    res.render("index", { weather, user: req.user, city: cityName,cities: Cities, citiesData: CitiesData});
-}
+        console.log(CitiesData);
+
+        res.render("index", {
+            weather,
+            user: req.user,
+            city: cityName,
+            cities: Cities,
+            citiesData: CitiesData
+        });
+    } catch (error) {
+        console.error(error);
+        // Handle error here
+        res.status(500).send('An error occurred');
+    }
+};
 
 async function weatherJson(cityName) {
     const api = '06c70491b3c169a9083f9587f91c5153';
-
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${api}`;
 
-    let weather;
-    let error = "Nie ma takiego miasta!";
     try {
         const response = await axios.get(url);
-        weather = response.data;
-        error = null;
+        return response.data;
     } catch (err) {
         console.error(err);
-        weather = null;
+        return null;
     }
-    return weather;
 }
-
 
 
 // exports.create_city = (req, res, next) => {
