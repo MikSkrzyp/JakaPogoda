@@ -13,7 +13,7 @@
     <div class="container">
       <h1>Jaka Pogoda</h1>
       <form action="/weather" method="get">
-        <input type="text" name="city" placeholder="Wpisz nazwę miasta" />
+        <input type="text" name="city" <% if (city == null) { %> placeholder="Wpisz nazwę miasta" <% } else { %> value="<%= city %>" <% } %> />
         <button type="submit">Zobacz pogodę!</button>
       </form>
 <!--      <form action="/city" method="post">-->
