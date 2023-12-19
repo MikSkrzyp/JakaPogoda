@@ -47,12 +47,15 @@ const axios = require("axios");
 const City = require('../models/city');
 const express = require('express');
 const bodyParser = require('body-parser');
+const User = require ("../models/user");
+// const router = require("../routes/weathers")
+const routes = require('express').Router()
 
 const app = express();
 
 // Middleware to parse incoming request bodies
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+routes.use(bodyParser.urlencoded({ extended: true }));
+routes.use(bodyParser.json());
 
 exports.weather_get = async (req, res) => {
     const cityName = req.query.city;
@@ -71,7 +74,7 @@ exports.weather_get = async (req, res) => {
         weather = null;
     }
 
-    res.render("index", { weather, error, user: req.user });
+    res.render("index", { weather, error, user: req.user, city: cityName });
 }
 
 // exports.create_city = (req, res, next) => {
@@ -89,10 +92,16 @@ exports.weather_get = async (req, res) => {
 //         });
 // }
 exports.create_city = (req, res, next) => {
-    console.log(req.body.mail)
+
+    const { city,email } = req.body;
+    console.log(city,email);
+    // const newCity = new City({
+    //     name: req.body, // Access the form data using req.body
+    //     email: req.query.email // Access the email from the hidden input
+    // });
     const newCity = new City({
-        name: req.query.city, // Access the form data using req.body
-        mail: req.query.email // Access the email from the hidden input
+        city,
+        email,
     });
 
     console.log(newCity);

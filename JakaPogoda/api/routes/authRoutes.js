@@ -2,6 +2,7 @@ const routes = require('express').Router()
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const User = require('../models/user')
+const City = require('../models/city')
 const passport = require('passport')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
@@ -10,8 +11,29 @@ const flash = require('connect-flash')
 
 const express = require('express');
 const { initializeMiddlewares, ensureAuth } = require('../middleware/ensureAuth');
+const weatherController = require ("../controllers/weatherController");
 
 initializeMiddlewares(routes);
+
+
+
+
+routes.post("/city", ensureAuth,(req, res) => {
+const newCity = new City({
+        name: req.body.city,
+        email: req.body.email
+    });
+    console.log(newCity);
+    newCity.save()
+        .then(result => {
+            res.redirect('/');
+        })
+        .catch(error => {
+            res.status(500).json(error);
+        });
+
+});
+
 
 //ROUTES
 //GET index strona rejestracyjna

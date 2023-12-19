@@ -12,9 +12,9 @@ router.get("/weather",ensureAuth,weatherController.weather_get);
 
 
 router.get("/", ensureAuth,(req, res) => {
-    res.render("index", { weather: null, error: null, user: req.user });
+    res.render("index", { weather: null, error: null, user: req.user , city: null});
 });
 
-router.post("/city", ensureAuth,weatherController.create_city);
+// router.post("/city", ensureAuth,weatherController.create_city)
 
 module.exports = router;
