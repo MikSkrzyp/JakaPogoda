@@ -16,6 +16,16 @@
         <input type="text" name="city" placeholder="Wpisz nazwę miasta" />
         <button type="submit">Zobacz pogodę!</button>
       </form>
+<!--      <form action="/city" method="post">-->
+<!--        <input type="text" name="city" placeholder="Wpisz nazwę miasta" />-->
+<!--        <input type="hidden" name="email" value="<%= user.mail %>" />-->
+<!--        <button type="submit">dodaj miasto</button>-->
+<!--      </form>-->
+      <form action="/city" method="post">
+        <input type="text" name="city" placeholder="Wpisz nazwę miasta" />
+        <input type="hidden" name="email" value="<%= user.mail %>" />
+        <button type="submit">dodaj miasto</button>
+      </form>
         <% if (error) { %>
       <p class="error"><%= error %></p>
       <% } else if (weather) { %>
