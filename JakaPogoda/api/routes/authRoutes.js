@@ -127,10 +127,6 @@ routes.post('/login', (req, res, next) => {
 })
 
 
-//sukces
-routes.get('/success', ensureAuth, (req, res) => {
-    res.render('success', { 'user': req.user })
-})
 
 // wylogowywanie rout
 routes.get('/logout', (req, res) => {
@@ -146,23 +142,4 @@ routes.get('/logout', (req, res) => {
 });
 
 
-//post wiadomosci
-routes.post('/addmsg', ensureAuth, (req, res) => {
-    User.findOneAndUpdate({
-            email: req.user.email
-        },
-        {
-            $push: {
-                messages: req.body['msg']
-            }
-        }, (err, success) => {
-            if (err) throw err;
-            if (success) {
-                console.log("Added ...")
-            }
-        });
-    req.flash('success_message', "Message Added Successfully")
-    res.redirect('/success')
-
-})
 module.exports = routes
