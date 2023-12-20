@@ -13,7 +13,7 @@
     <div class="container">
       <h1>Jaka Pogoda</h1>
       <form action="/weather" method="get">
-        <input type="text" name="city" <% if (city == null) { %> placeholder="Wpisz nazwę miasta" <% } else { %> value="<%= city %>" <% } %> />
+        <input type="text" name="city" <% if (city == null) { %> placeholder="Wpisz nazwę miasta" <% } else { %> placeholder="<%= city %>" <% } %> />
         <button type="submit">Zobacz pogodę!</button>
       </form>
 <!--      <form action="/city" method="post">-->
@@ -21,7 +21,7 @@
 <!--        <input type="hidden" name="email" value="<%= user.email %>" />-->
 <!--        <button type="submit">dodaj miasto</button>-->
 <!--      </form>-->
-      <% if (city !== null) { %>
+      <% if (city !== null && error==null) { %>
         <form action="/city" method="post">
           <input type="hidden" name="city" placeholder="Wpisz nazwę miasta" value="<%= city%>" />
           <input type="hidden" name="email" value="<%= user.email %>" />
@@ -29,8 +29,8 @@
         </form>
       <% } %>
 
-    <% if (error) { %>
-      <p class="error"><%= error %></p>
+      <% if (error) { %>
+        <p class="error"><%= error %></p>
       <% } else if (weather) { %>
       <div class="card">
       
@@ -61,7 +61,7 @@
     </tr>
     </thead>
     <tbody>
-    <% if (cities !== null && citiesData !== null) { %>
+    <% if (cities !== null && citiesData !== null && city["name"]!=="") { %>
       <% cities.forEach(city => { %>
         <tr>
           <td><%= city["name"] %></td>

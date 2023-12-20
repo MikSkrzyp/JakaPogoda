@@ -96,8 +96,21 @@ routes.use(bodyParser.json());
 
 exports.weather_get = async (req, res) => {
     const cityName = req.query.city;
-    const weather = await weatherJson(cityName);
+    let weather = "";
     const user = req.user;
+    let error = "Nie ma takiego miasta!";
+
+    const api = '06c70491b3c169a9083f9587f91c5153';
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${api}`;
+
+    try {
+        const response = await axios.get(url);
+        weather = response.data;
+        error = null;
+    } catch (err) {
+        console.error(err);
+        weather= null;
+    }
 
     const Cities = await City.find({ email: user.email });
 
@@ -112,9 +125,9 @@ exports.weather_get = async (req, res) => {
         });
 
         console.log(CitiesData);
-
         res.render("index", {
-            weather,
+            error: error,
+            weather: weather,
             user: req.user,
             city: cityName,
             cities: Cities,
@@ -157,7 +170,9 @@ async function weatherJson(cityName) {
 // }
 exports.create_city = (req, res, next) => {
 
+
     const { city,email } = req.body;
+
     console.log(city,email);
     // const newCity = new City({
     //     name: req.body, // Access the form data using req.body
@@ -167,6 +182,7 @@ exports.create_city = (req, res, next) => {
         city,
         email,
     });
+
 
     console.log(newCity);
     newCity.save()
