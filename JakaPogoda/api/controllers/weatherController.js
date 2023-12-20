@@ -95,7 +95,14 @@ routes.use(bodyParser.json());
 // }
 
 exports.weather_get = async (req, res) => {
-    const cityName = req.query.city;
+    let cityName;
+    if(req.query.city === undefined){
+        cityName = "Warszawa";
+    }
+    else{
+        cityName = req.query.city;
+    }
+    //const cityName = req.query.city;
     let weather = "";
     const user = req.user;
     let error = "Nie ma takiego miasta!";

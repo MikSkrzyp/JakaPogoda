@@ -11,9 +11,10 @@ const weatherController = require("../controllers/weatherController")
 router.get("/weather",ensureAuth,weatherController.weather_get);
 
 
-router.get("/", ensureAuth,(req, res) => {
-    res.render("index", { weather: null, error: null, user: req.user , city: null,cities: null});
-});
+// router.get("/", ensureAuth,(req, res) => {
+//     res.render("index", { weather: null, error: null, user: req.user , city: null,cities: null});
+// });
+router.get("/", ensureAuth,weatherController.weather_get);
 
 // router.post("/city", ensureAuth,weatherController.create_city)
 

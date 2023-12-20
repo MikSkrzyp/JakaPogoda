@@ -34,6 +34,17 @@ const newCity = new City({
 
 });
 
+routes.delete("/city/:id", ensureAuth,(req, res) => {
+    const id = req.params.id;
+    City.findByIdAndDelete(id)
+        .then(result => {
+            res.json({ redirect: '/' });
+        })
+        .catch(error => {
+            res.status(500).json(error);
+        });
+});
+
 
 //ROUTES
 //GET index strona rejestracyjna
