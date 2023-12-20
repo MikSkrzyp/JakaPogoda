@@ -1,16 +1,7 @@
 Projekt Mikołaja Skrzypkowskiego i Oskara Gajewskiego na zajęcia UG
 
-
-Technologie wykorzystane:
-
-
-JS (EJS,EXPRESS JS, NODE JS),
-
-
-CSS (BOOTSTRAP),
-
-
+Tech Stack:
+JS (EJS,NODE JS,EXPRESS JS),
+CSS(BOOTSTRAP),
 HTML,
-
-
 MONGODB
