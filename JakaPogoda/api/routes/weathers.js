@@ -1,13 +1,18 @@
 const express = require("express");
+const router = express.Router();
+const { initializeMiddlewares, ensureAuth } = require('../middleware/ensureAuth');
 
-//wyciagam route
-const router = express.Router()
+initializeMiddlewares(router);
 
 //
 const weatherController = require("../controllers/weatherController")
 
-//weather rout
-router.get("/",weatherController.weather_get);
+//weather rout which return result
+router.get("/weather",ensureAuth,weatherController.weather_get);
+
+
+
+router.get("/", ensureAuth,weatherController.weather_get);
 
 
 module.exports = router;
