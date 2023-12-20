@@ -12,7 +12,10 @@
 
   </head>
   <body>
-    <a class="lgt" href="/logout">Wyloguj</a>
+    <a class="lgt" href="/logout">
+      <button type="button" class="btn btn-info">Wyloguj się</button>
+    </a>
+    
   <h1 style="font-size: 20px;">Witaj na stronie pogodowej <%= user.username %></h1>
     <div class="container">
       <h1>Jaka Pogoda</h1>
@@ -20,18 +23,7 @@
         <input type="text" name="city" <% if (city == null) { %> placeholder="Wpisz nazwę miasta" <% } else { %> placeholder="<%= city %>" <% } %> />
         <button type="submit">Zobacz pogodę!</button>
       </form>
-<!--      <form action="/city" method="post">-->
-<!--        <input type="text" name="city" placeholder="Wpisz nazwę miasta" />-->
-<!--        <input type="hidden" name="email" value="<%= user.email %>" />-->
-<!--        <button type="submit">dodaj miasto</button>-->
-<!--      </form>-->
-      <% if (city !== null && error==null) { %>
-        <form action="/city" method="post">
-          <input type="hidden" name="city" placeholder="Wpisz nazwę miasta" value="<%= city%>" />
-          <input type="hidden" name="email" value="<%= user.email %>" />
-          <button type="submit">dodaj miasto</button>
-        </form>
-      <% } %>
+
 
       <% if (error) { %>
         <p class="error"><%= error %></p>
@@ -51,6 +43,15 @@
           <i class="fas fa-map-marker-alt"></i>
           <%=weather.name%>, <%=weather.sys.country%>
         </p>
+        <div>
+          <% if (city !== null && error==null) { %>
+            <form action="/city" method="post">
+              <input type="hidden" name="city" placeholder="Wpisz nazwę miasta" value="<%= city%>" />
+              <input type="hidden" name="email" value="<%= user.email %>" />
+              <button type="submit">Dodaj Miasto <%=city%></button>
+            </form>
+          <% } %>
+        </div>
       </div>
       <% } %>
     </div>

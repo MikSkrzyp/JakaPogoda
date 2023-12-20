@@ -20,9 +20,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 //ROUTES
 app.use('/', Authroutes)
-  // app.get("/", (req, res) => {
-  //   res.render("index", { weather: null, error: null });
-  // });
+ 
 
 //zmienne srodowiesko
 require("dotenv").config()
@@ -38,6 +36,3 @@ app.listen(port, () => {
 });
 
 
-// DB_USERNAME="admin2"
-// DB_PASSWORD="admin2"
-// DB_NAME="pv1"
