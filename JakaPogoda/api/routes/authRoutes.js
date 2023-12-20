@@ -34,13 +34,16 @@ const newCity = new City({
 
 });
 
-routes.delete("/city/:id", ensureAuth,(req, res) => {
+routes.post("/city/:id", ensureAuth,(req, res) => {
     const id = req.params.id;
+    console.log(id);
+
     City.findByIdAndDelete(id)
         .then(result => {
-            res.json({ redirect: '/' });
+            res.redirect('/');
         })
         .catch(error => {
+            console.log("error");
             res.status(500).json(error);
         });
 });

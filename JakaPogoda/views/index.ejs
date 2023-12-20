@@ -60,8 +60,8 @@
     <h2 id="tytul_tabeli">Twoje Dodane Miasta</h2>
     <thead>
     <tr>
-      <th>City</th>
-      <th>temperatura</th>
+      <th>Miasto</th>
+      <th>Temperatura</th>
       <th>Usuń</th>
     </tr>
     </thead>
@@ -71,7 +71,11 @@
         <tr>
           <td><%= city["name"] %></td>
             <td><%= citiesData[city["name"]].main.temp %></td>
-            <td><button type="button"class="btn btn-danger">X</button></td>
+          <form id="deleteForm" action="/city/<%=city["id"]%>" method="post">
+            <td>
+              <button id="deleteButton" type="submit" class="btn btn-danger">X</button>
+            </td>
+          </form>
         </tr>
       <% }); %>
     <% } %>
