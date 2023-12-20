@@ -13,7 +13,6 @@ const initializeMiddlewares = (routes) => {
             saveUninitialized: false,
         })
     );
-
     routes.use(passport.initialize());
     routes.use(passport.session());
 

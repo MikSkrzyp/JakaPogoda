@@ -1,21 +1,19 @@
 const routes = require('express').Router()
-const mongoose = require('mongoose')
+//const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const User = require('../models/user')
 const City = require('../models/city')
 const passport = require('passport')
-const cookieParser = require('cookie-parser')
-const session = require('express-session')
-const dotenv = require('dotenv')
-const flash = require('connect-flash')
+//const cookieParser = require('cookie-parser')
+//const session = require('express-session')
+//const dotenv = require('dotenv')
+//const flash = require('connect-flash')
 
-const express = require('express');
+//const express = require('express');
 const { initializeMiddlewares, ensureAuth } = require('../middleware/ensureAuth');
-const weatherController = require ("../controllers/weatherController");
+//const weatherController = require ("../controllers/weatherController");
 
 initializeMiddlewares(routes);
-
-
 
 
 routes.post("/city", ensureAuth,(req, res) => {
@@ -56,35 +54,32 @@ routes.post("/city/:id", ensureAuth,(req, res) => {
 // })
 
 // GET Route for registration form
-// GET Route for registration form
+
+// GET Registration Page
 routes.get('/register', (req, res) => {
-    const errorMessage = req.flash('error_message');
-    const successMessage = req.flash('success_message');
-    res.render('register', { error: errorMessage, success: successMessage });
+    const { error, success } = req.query;
+    res.render('register', { error, success });
 });
 
-// Registration Route
+// POST Registration Route
 routes.post('/register', async (req, res) => {
     try {
         const { username, email, password1, password2 } = req.body;
 
         // Validation
         if (!email || !username || !password1 || !password2) {
-            req.flash('error_message', 'Please fill all the fields');
-            return res.redirect('/register');
+            return res.redirect('/register?error=Please%20fill%20all%20the%20fields');
         }
 
         if (password1 !== password2) {
-            req.flash('error_message', "Passwords don't match");
-            return res.redirect('/register');
+            return res.redirect('/register?error=Passwords%20don\'t%20match');
         }
 
         // Check if the user already exists
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
-            req.flash('error_message', 'User already exists');
-            return res.redirect('/register');
+            return res.redirect('/register?error=User%20already%20exists');
         }
 
         // Hash password
@@ -101,13 +96,12 @@ routes.post('/register', async (req, res) => {
         // Save to the database
         await newUser.save();
 
-        req.flash('success_message', 'Registered Successfully. Please log in to continue.');
-        return res.redirect('/login');
+        return res.redirect('/login?success=Registered%20Successfully.%20Please%20log%20in%20to%20continue.');
     } catch (error) {
-        req.flash('error_message', 'Something went wrong. Please try again.'); // Generic error message
-        return res.redirect('/register');
+        return res.redirect('/register?error=Something%20went%20wrong.%20Please%20try%20again.');
     }
 });
+
 
 //AUTH STRATEGY
 const localStrategy = require('passport-local').Strategy;
@@ -158,19 +152,31 @@ passport.deserializeUser(async (id, cb) => {
 
 
 //login
+// GET Login Page
 routes.get('/login', (req, res) => {
-    res.render('login')
-})
+    const { error } = req.query;
+    res.render('login', { error });
+});
+
+// POST Login Route
 routes.post('/login', (req, res, next) => {
-    console.log(req.body)
-    //definiowanie strategy
-    passport.authenticate('local', {
-        failureRedirect: '/login',
-        
-        successRedirect: '/',
-        failureFlash: true,
+    // Define strategy
+    passport.authenticate('local', (err, user, info) => {
+        if (err) {
+            return res.redirect('/login?error=Something%20went%20wrong.%20Please%20try%20again.');
+        }
+        if (!user) {
+            return res.redirect('/login?error=Invalid%20username%20or%20password.');
+        }
+        req.logIn(user, (loginErr) => {
+            if (loginErr) {
+                return res.redirect('/login?error=Login%20failed.%20Please%20try%20again.');
+            }
+            return res.redirect('/');
+        });
     })(req, res, next);
-})
+});
+
 
 
 
