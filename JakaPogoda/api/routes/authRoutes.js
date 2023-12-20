@@ -51,51 +51,61 @@ routes.post("/city/:id", ensureAuth,(req, res) => {
 
 //ROUTES
 //GET index strona rejestracyjna
+// routes.get('/register', (req, res) => {
+//     res.render('register')
+// })
+
+// GET Route for registration form
+// GET Route for registration form
 routes.get('/register', (req, res) => {
-    res.render('register')
-})
+    const errorMessage = req.flash('error_message');
+    const successMessage = req.flash('success_message');
+    res.render('register', { error: errorMessage, success: successMessage });
+});
 
-//rejestracja
-
-
+// Registration Route
 routes.post('/register', async (req, res) => {
     try {
         const { username, email, password1, password2 } = req.body;
 
-        // walidacja
+        // Validation
         if (!email || !username || !password1 || !password2) {
-            throw new Error("Please fill all the fields");
+            req.flash('error_message', 'Please fill all the fields');
+            return res.redirect('/register');
         }
 
         if (password1 !== password2) {
-            throw new Error("Passwords don't match");
+            req.flash('error_message', "Passwords don't match");
+            return res.redirect('/register');
         }
 
-        // sprawdzenie czy uzytkownik istnieje
+        // Check if the user already exists
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
-            throw new Error("User already exists");
+            req.flash('error_message', 'User already exists');
+            return res.redirect('/register');
         }
 
-        // hashowanie hasla
+        // Hash password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password1, salt);
 
-        // stworzenie nowego usera
+        // Create a new user
         const newUser = new User({
             username,
             email,
             password: hashedPassword
         });
 
-        // zapisywanie do bazy danych
+        // Save to the database
         await newUser.save();
 
         req.flash('success_message', 'Registered Successfully. Please log in to continue.');
-        res.redirect('/login');
+        return res.redirect('/login');
     } catch (error) {
-        res.render('register', { err: error.message, email, username });
+        req.flash('error_message', 'Something went wrong. Please try again.'); // Generic error message
+        return res.redirect('/register');
     }
 });
 
