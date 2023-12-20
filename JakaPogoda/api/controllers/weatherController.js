@@ -4,8 +4,6 @@ const axios = require("axios");
 const City = require('../models/city');
 const express = require('express');
 const bodyParser = require('body-parser');
-const User = require ("../models/user");
-// const router = require("../routes/weathers")
 const routes = require('express').Router()
 
 const app = express();
@@ -83,30 +81,14 @@ async function weatherJson(cityName) {
 }
 
 
-// exports.create_city = (req, res, next) => {
-//     const newCity = new City({
-//         name: req.body.city,
-//         mail: req.body.mail
-//     });
-//     console.log(newCity);
-//     newCity.save()
-//         .then(result => {
-//             res.redirect('/');
-//         })
-//         .catch(error => {
-//             res.status(500).json(error);
-//         });
-// }
+
 exports.create_city = (req, res, next) => {
 
 
     const { city,email } = req.body;
 
     console.log(city,email);
-    // const newCity = new City({
-    //     name: req.body, // Access the form data using req.body
-    //     email: req.query.email // Access the email from the hidden input
-    // });
+
     const newCity = new City({
         city,
         email,

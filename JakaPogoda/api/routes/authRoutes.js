@@ -1,13 +1,9 @@
 const routes = require('express').Router()
-//const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const User = require('../models/user')
 const City = require('../models/city')
 const passport = require('passport')
-//const cookieParser = require('cookie-parser')
-//const session = require('express-session')
-//const dotenv = require('dotenv')
-//const flash = require('connect-flash')
+
 
 //const express = require('express');
 const { initializeMiddlewares, ensureAuth } = require('../middleware/ensureAuth');
@@ -47,11 +43,7 @@ routes.post("/city/:id", ensureAuth,(req, res) => {
 });
 
 
-//ROUTES
-//GET index strona rejestracyjna
-// routes.get('/register', (req, res) => {
-//     res.render('register')
-// })
+
 
 // GET Route for registration form
 
