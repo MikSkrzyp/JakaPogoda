@@ -27,7 +27,7 @@ exports.weather_get = async (req, res) => {
     const user = req.user;
     let error = "Nie ma takiego miasta!";
 
-    const api = '06c70491b3c169a9083f9587f91c5153';
+    const api = "Insert here api key";
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${api}`;
 
     try {
@@ -68,7 +68,7 @@ exports.weather_get = async (req, res) => {
 };
 
 async function weatherJson(cityName) {
-    const api = '06c70491b3c169a9083f9587f91c5153';
+    const api = 'Insert here api key';
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${api}`;
 
     try {
